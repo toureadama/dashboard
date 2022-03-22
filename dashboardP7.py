@@ -13,13 +13,13 @@ import joblib
 
 
 @st.cache
-def charge_donnees(num_rows, nb_ech):
-    path = "C:\\Users\\toure\\Desktop\\OpenClassrooms\\Projet 7\\donnees\\"
+def charge_donnees(nb_ech):
+    #path = "C:\\Users\\toure\\Desktop\\OpenClassrooms\\Projet 7\\donnees\\"
     
-    data = pd.read_csv(path+"donnees_traites.csv", nrows= num_rows)
-    data_client_1 = pd.read_csv(path+"donnees_traites_1.csv")
-    colonnes_fr = pd.read_csv(path+"colonnes.csv")
-    table_indic = pd.read_csv(path+"HomeCredit_columns_description.csv", encoding= 'unicode_escape')
+    data = pd.read_csv("echant_traites.csv")
+    data_client_1 = pd.read_csv("donnees_traites_1.csv")
+    colonnes_fr = pd.read_csv("colonnes.csv")
+    table_indic = pd.read_csv("HomeCredit_columns_description.csv", encoding= 'unicode_escape')
     
     data = data[list(colonnes_fr.iloc[:,1])]   
     data_client_1 = data_client_1[list(colonnes_fr.iloc[:,1])]
@@ -34,8 +34,8 @@ def charge_donnees(num_rows, nb_ech):
     return data, data_client, table_indic, references_test
 
 def main():
-    data, data_client, table_indic, references_test = charge_donnees(10000, 50)
-    loaded_model = joblib.load('C://Users//toure//Desktop//OpenClassrooms//Projet 7//logreg_housing.joblib')
+    data, data_client, table_indic, references_test = charge_donnees(50)
+    loaded_model = joblib.load('logreg_housing.joblib')
     
     st.title('Prêt à dépenser: Credit Scoring')
     
@@ -78,6 +78,7 @@ def main():
     predict_btn = st.button('Prédire')
     if predict_btn:
         # Appel de l'API :
+        #API_url = "https://demo-adam.herokuapp.com/predict?SK_ID_CURR=" + str(ref_client)
         API_url = "http://127.0.0.1:5000/predict?SK_ID_CURR=" + str(ref_client)
         with st.spinner('Chargement du score client...'):
             json_url = urlopen(API_url)
